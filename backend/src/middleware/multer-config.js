@@ -1,20 +1,16 @@
-const multer = require('multer');
-
-const MIME_TYPES = {
-  'image/jpg': 'jpg',
-  'image/jpeg': 'jpg',
-  'image/png': 'png'
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, 'images');
-  },
-  filename: (req, file, callback) => {
-    const name = file.originalname.split(' ').join('_');
-    const extension = MIME_TYPES[file.mimetype];
-    callback(null, name + Date.now() + '.' + extension);
-  }
+Object.defineProperty(exports, "__esModule", { value: true });
+var multer_1 = __importDefault(require("multer"));
+var storage = multer_1.default.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../assets/images');
+    },
+    filename: function (req, file, cb) {
+        console.log(file);
+        cb(null, file.originalname + "-" + Date.now());
+    }
 });
-
-module.exports = multer({storage: storage}).single('image');
+exports.default = multer_1.default({ storage: storage }).single('image');
