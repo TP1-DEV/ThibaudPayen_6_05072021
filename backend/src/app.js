@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require('path');
 
-const sauceRoutes = require("../routes/sauce");
-const userRoutes = require("../routes/user");
+const sauceRoutes = require("./routes/sauce");
+const userRoutes = require("./routes/user");
 
 const app = express();
 
-require("dotenv").config();
+require("dotenv").config({path: './assets/config/.env'});
 
 mongoose.connect(`${process.env.DB_URL}`, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connexion à MongoDB réussie !"))
@@ -20,6 +20,7 @@ app.use(express.json());
 
 app.use("/api/sauces", sauceRoutes);
 app.use("/api/auth", userRoutes);
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, './assets/images')));
+
 
 module.exports = app;
