@@ -1,4 +1,4 @@
-import Sauce from '../models/Sauce'
+import Sauce from '../models/Sauce.models'
 import fs from 'fs'
 import {NextFunction, Request, Response} from 'express'
 

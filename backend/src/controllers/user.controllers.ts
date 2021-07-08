@@ -1,6 +1,6 @@
-import {defaultConfig} from '../config/config'
+import config from '../config/config'
 import bcrypt from 'bcrypt'
-import User from '../models/User'
+import User from '../models/User.models'
 import jwt from 'jsonwebtoken'
 import {NextFunction, Request, Response} from 'express'
 
@@ -34,7 +34,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
           }
           res.status(200).json({
             userId: user._id,
-            token: jwt.sign({userId: user._id}, defaultConfig.token, {expiresIn: '24h'}),
+            token: jwt.sign({userId: user._id}, config.token, {expiresIn: '24h'}),
           })
         })
         .catch((error) => res.status(500).json({error}))

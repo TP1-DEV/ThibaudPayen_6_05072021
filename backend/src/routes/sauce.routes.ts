@@ -2,9 +2,9 @@ import express from 'express'
 const router = express.Router()
 
 import auth from '../middleware/auth'
-import multer from '../middleware/multer-config'
+import multer from '../middleware/multer'
 
-import {getAllSauces, getOneSauce, createSauce, modifySauce, deleteSauce} from '../controllers/sauce'
+import {getAllSauces, getOneSauce, createSauce, modifySauce, deleteSauce} from '../controllers/sauce.controllers'
 
 router.get('/', auth, getAllSauces)
 router.get('/:id', auth, getOneSauce)
