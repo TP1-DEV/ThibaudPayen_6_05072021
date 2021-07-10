@@ -1,15 +1,15 @@
-import express from 'express'
-const router = express.Router()
+import {Router} from 'express'
+import {getAllSauces, getOneSauce, createSauce, modifySauce, deleteSauce} from '../controllers/sauce.controllers'
 
 import auth from '../middleware/auth'
 import multer from '../middleware/multer'
 
-import {getAllSauces, getOneSauce, createSauce, modifySauce, deleteSauce} from '../controllers/sauce.controllers'
+const sauceRouter = Router()
 
-router.get('/', auth, getAllSauces)
-router.get('/:id', auth, getOneSauce)
-router.post('/', auth, multer, createSauce)
-router.put('/:id', auth, multer, modifySauce)
-router.delete('/:id', auth, deleteSauce)
+sauceRouter.get('/', auth, getAllSauces)
+sauceRouter.get('/:id', auth, getOneSauce)
+sauceRouter.post('/', auth, multer, createSauce)
+sauceRouter.put('/:id', auth, multer, modifySauce)
+sauceRouter.delete('/:id', auth, deleteSauce)
 
-export default router
+export default sauceRouter
