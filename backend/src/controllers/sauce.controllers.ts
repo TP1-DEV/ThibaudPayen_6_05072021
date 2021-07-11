@@ -1,8 +1,8 @@
 import Sauce from '../models/Sauce.models'
 import fs from 'fs'
-import {NextFunction, Request, Response} from 'express'
+import {Request, Response} from 'express'
 
-export const getAllSauces = (req: Request, res: Response, next: NextFunction) => {
+export const getAllSauces = (req: Request, res: Response) => {
   Sauce.find()
     .then((sauces) => {
       res.status(200).json(sauces)
@@ -12,7 +12,7 @@ export const getAllSauces = (req: Request, res: Response, next: NextFunction) =>
     })
 }
 
-export const getOneSauce = (req: Request, res: Response, next: NextFunction) => {
+export const getOneSauce = (req: Request, res: Response) => {
   Sauce.findOne({_id: req.params.id})
     .then((sauce) => {
       res.status(200).json(sauce)
@@ -22,13 +22,13 @@ export const getOneSauce = (req: Request, res: Response, next: NextFunction) => 
     })
 }
 
-export const createSauce = (req: Request, res: Response, next: NextFunction) => {
+export const createSauce = (req: Request, res: Response) => {
   const sauceObject = JSON.parse(req.body.sauce)
   delete sauceObject._id
   if (req.file !== undefined) {
     const sauce = new Sauce({
       ...sauceObject,
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     })
     sauce
       .save()
@@ -39,11 +39,11 @@ export const createSauce = (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
-export const modifySauce = (req: Request, res: Response, next: NextFunction) => {
+export const modifySauce = (req: Request, res: Response) => {
   const sauceObject = req.file
     ? {
         ...JSON.parse(req.body.sauce),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
       }
     : {...req.body}
   Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
@@ -51,7 +51,7 @@ export const modifySauce = (req: Request, res: Response, next: NextFunction) => 
     .catch((error) => res.status(400).json({error}))
 }
 
-export const deleteSauce = (req: Request, res: Response, next: NextFunction) => {
+export const deleteSauce = (req: Request, res: Response) => {
   Sauce.findOne({_id: req.params.id})
     .then((sauce) => {
       if (sauce !== null) {

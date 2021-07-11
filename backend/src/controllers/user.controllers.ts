@@ -2,15 +2,15 @@ import config from '../config/config'
 import bcrypt from 'bcrypt'
 import User from '../models/User.models'
 import jwt from 'jsonwebtoken'
-import {NextFunction, Request, Response} from 'express'
+import {Request, Response} from 'express'
 
-export const signup = (req: Request, res: Response, next: NextFunction) => {
+export const signup = (req: Request, res: Response) => {
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
       const user = new User({
         email: req.body.email,
-        password: hash,
+        password: hash
       })
       user
         .save()
@@ -20,7 +20,7 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
     .catch((error) => res.status(500).json({error}))
 }
 
-export const login = (req: Request, res: Response, next: NextFunction) => {
+export const login = (req: Request, res: Response) => {
   User.findOne({email: req.body.email})
     .then((user) => {
       if (!user) {
@@ -34,7 +34,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
           }
           res.status(200).json({
             userId: user._id,
-            token: jwt.sign({userId: user._id}, config.token, {expiresIn: '24h'}),
+            token: jwt.sign({userId: user._id}, config.token, {expiresIn: '24h'})
           })
         })
         .catch((error) => res.status(500).json({error}))

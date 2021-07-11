@@ -3,13 +3,7 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 interface Config {
-  path: string,
-  admin: string,
-  pwd: string,
-  url: string,
-  token: string,
-  host: string,
-  port: number
+  [key: string]: string
 }
 
 export default {
@@ -19,5 +13,5 @@ export default {
   url: process.env.DB_URL ?? '',
   token: process.env.TOKEN ?? '',
   host: process.env.HOST ?? '',
-  port: process.env.PORT ?? 3000
+  port: process.env.PORT ?? ''
 } as Config

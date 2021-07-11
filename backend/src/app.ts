@@ -12,10 +12,14 @@ const app = express()
 app.use(cors())
 app.use(helmet())
 app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 app.use(routes)
 app.use(images)
 
-app.listen(config.port, config.host, () => {
-  console.log(`Listening at http://${config.host}:${config.port}`)
+const port = parseInt(config.port, 10)
+const host = config.host
+
+app.listen(port, host, () => {
+  console.log(`Listening at http://${host}:${port}`)
   connect()
 })

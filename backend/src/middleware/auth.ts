@@ -18,7 +18,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     }
   } catch {
     res.status(401).json({
-      error: new Error('Invalid request!'),
+      error: new Error('Invalid request!')
     })
   }
 }

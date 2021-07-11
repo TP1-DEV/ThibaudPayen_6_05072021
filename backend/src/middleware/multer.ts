@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
   filename: (req: any, file: any, cb: any) => {
     console.log(file)
     cb(null, `${file.originalname}-${Date.now()}`)
-  },
+  }
 })
 
 export default multer({storage: storage}).single('image')
