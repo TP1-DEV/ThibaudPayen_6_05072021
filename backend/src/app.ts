@@ -1,5 +1,5 @@
 import config from './config/config'
-import {connect} from './db/connect'
+import connect from './db/connect'
 import routes from './routes/routes'
 import images from './config/images'
 

@@ -8,10 +8,10 @@ interface IUser extends Document {
   mainPepper: string
   imageUrl: string
   heat: number
-  /* likes: number
+  likes: number
   dislikes: number
   userLiked: string
-  userDislikes: string */
+  userDislikes: string
 }
 
 const sauceSchema = new mongoose.Schema({
@@ -42,22 +42,21 @@ const sauceSchema = new mongoose.Schema({
   heat: {
     type: Number, 
     required: true
-  }
-  /* likes: {
-    type: Number, 
-    required: true
+  },
+  likes: {
+    type: Number,
+    default: 0
   },
   dislikes: {
-    type: Number, 
-    required: true
+    type: Number,
+    default: 0
   },
   userLiked: {
-    type: [String], 
-    required: true
+    type: [String]
   },
   userDislikes: {
-    type: [String], required: true
-  }, */
+    type: [String]
+  }
 })
 
 export default mongoose.model<IUser>('Sauce', sauceSchema)
