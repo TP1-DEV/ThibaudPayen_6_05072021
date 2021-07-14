@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-interface IUser extends Document {
+interface Sauce extends Document {
   userId: string
   name: string
   manufacturer: string
@@ -10,8 +10,8 @@ interface IUser extends Document {
   heat: number
   likes: number
   dislikes: number
-  userLiked: string
-  userDislikes: string
+  usersLiked: [string]
+  usersDisliked: [string]
 }
 
 const sauceSchema = new mongoose.Schema({
@@ -21,23 +21,27 @@ const sauceSchema = new mongoose.Schema({
   },
   name: {
     type: String, 
-    required: true
+    required: [true, 'Nom requis'],
+    minLength: [3, '3 caractères minimum']
   },
   manufacturer: {
     type: String, 
-    required: true
+    required: [true, 'Manufacturer requis'],
+    minLength: [3, '3 caractères minimum']
   },
   description: {
     type: String, 
-    required: true
+    required: [true, 'Description requise'],
+    minLength: [3, '3 caractères minimum']
   },
   mainPepper: {
     type: String, 
-    required: true
+    required: [true, 'Ingredient principal requis'],
+    minLength: [3, '3 caractères minimum']
   },
   imageUrl: {
     type: String, 
-    required: true
+    required: [true, 'Image requise'],
   },
   heat: {
     type: Number, 
@@ -51,12 +55,12 @@ const sauceSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  userLiked: {
+  usersLiked: {
     type: [String]
   },
-  userDislikes: {
+  usersDisliked: {
     type: [String]
   }
 })
 
-export default mongoose.model<IUser>('Sauce', sauceSchema)
+export default mongoose.model<Sauce>('Sauce', sauceSchema)
