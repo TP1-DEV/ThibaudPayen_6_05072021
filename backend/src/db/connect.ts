@@ -1,11 +1,12 @@
 import mongoose from 'mongoose'
 import config from '../config/config'
 
-export default () => {
+const connect = async () => {
   try {
-    mongoose.connect(config.url, {useNewUrlParser: true, useUnifiedTopology: true})
+    await mongoose.connect(config.url, {useNewUrlParser: true, useUnifiedTopology: true})
     return console.log('Connexion à MongoDB réussie !')
   } catch (error) {
     return console.log('Connexion à MongoDB échouée !')
   }
 }
+ export default connect

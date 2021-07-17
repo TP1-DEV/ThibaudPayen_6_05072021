@@ -71,24 +71,28 @@ export const deleteSauce = async (req: Request, res: Response) => {
 
 export const likes = async (req: Request, res: Response) => {
   const like = req.body.like
-  switch (like) {
-    case 0:
-      const sauce = await Sauce.findOne({_id: req.params.id})
-      if (sauce !== null && sauce.likes === 1) {
-        await Sauce.updateOne({_id: req.params.id}, {$inc: {likes: -1}, $pull: {usersLiked: req.body.userId}})
-        res.status(200).json({message: 'Avis supprimé'})
-      } else {
-        await Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: -1}, $pull: {usersDisliked: req.body.userId}})
-        res.status(200).json({message: 'Avis supprimé'})
-      }
-      break
-    case 1:
-      await Sauce.updateOne({_id: req.params.id}, {$inc: {likes: 1}, $push: {usersLiked: req.body.userId}})
-      res.status(200).json({message: "J'aime"})
-      break
-    case -1:
-      await Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: 1}, $push: {usersDisliked: req.body.userId}})
-      res.status(200).json({message: "Je n'aime pas"})
-      break
+  try {
+    switch (like) {
+      case 0:
+        const sauce = await Sauce.findOne({_id: req.params.id})
+        if (sauce !== null && sauce.likes === 1) {
+          await Sauce.updateOne({_id: req.params.id}, {$inc: {likes: -1}, $pull: {usersLiked: req.body.userId}})
+          res.status(200).json({message: 'Avis supprimé'})
+        } else {
+          await Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: -1}, $pull: {usersDisliked: req.body.userId}})
+          res.status(200).json({message: 'Avis supprimé'})
+        }
+        break
+      case 1:
+        await Sauce.updateOne({_id: req.params.id}, {$inc: {likes: 1}, $push: {usersLiked: req.body.userId}})
+        res.status(200).json({message: "J'aime"})
+        break
+      case -1:
+        await Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: 1}, $push: {usersDisliked: req.body.userId}})
+        res.status(200).json({message: "Je n'aime pas"})
+        break
+    }
+  } catch (error) {
+    res.status(500).json({message: 'error'})
   }
 }

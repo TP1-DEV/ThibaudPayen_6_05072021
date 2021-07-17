@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "start:prod": "tsc & ts-node dist/app.js",
-    "start:dev": "tsnd src/app.ts --watch --pretty --transpile-only"
+    "start:dev": "tsnd src/app.ts --watch --pretty --transpile-only",
+    "test": "tsnd src/server.ts --watch"
   },
   "author": "",
   "license": "ISC",

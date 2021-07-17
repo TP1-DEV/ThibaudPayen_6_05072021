@@ -1,50 +1,37 @@
-import mongoose, { isValidObjectId } from 'mongoose'
-
-interface Sauce extends Document {
-  userId: string
-  name: string
-  manufacturer: string
-  description: string
-  mainPepper: string
-  imageUrl: string
-  heat: number
-  likes: number
-  dislikes: number
-  usersLiked: string[]
-  usersDisliked: string[]
-}
+import mongoose from 'mongoose'
+import Sauce from './sauce.interfaces'
 
 const sauceSchema = new mongoose.Schema({
   userId: {
-    type: String, 
+    type: String,
     required: true
   },
   name: {
-    type: String, 
+    type: String,
     required: [true, 'Nom requis'],
     minLength: [3, '3 caractères minimum']
   },
   manufacturer: {
-    type: String, 
+    type: String,
     required: [true, 'Manufacturer requis'],
     minLength: [3, '3 caractères minimum']
   },
   description: {
-    type: String, 
+    type: String,
     required: [true, 'Description requise'],
     minLength: [3, '3 caractères minimum']
   },
   mainPepper: {
-    type: String, 
+    type: String,
     required: [true, 'Ingredient principal requis'],
     minLength: [3, '3 caractères minimum']
   },
   imageUrl: {
-    type: String, 
-    required: [true, 'Image requise'],
+    type: String,
+    required: [true, 'Image requise']
   },
   heat: {
-    type: Number, 
+    type: Number,
     required: true
   },
   likes: {

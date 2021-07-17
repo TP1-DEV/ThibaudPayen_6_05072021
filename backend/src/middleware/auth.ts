@@ -1,12 +1,9 @@
 import config from '../config/config'
 import {NextFunction, Request, Response} from 'express'
 import jwt from 'jsonwebtoken'
+import DecodedToken from '../interfaces/auth.interfaces'
 
-interface DecodedToken {
-  userId: string
-}
-
-export default (req: Request, res: Response, next: NextFunction) => {
+const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = typeof req.headers.authorization === 'string' ? req.headers.authorization.split(' ')[1] : ''
     const decodedToken = jwt.verify(token, config.token) as DecodedToken
@@ -22,3 +19,5 @@ export default (req: Request, res: Response, next: NextFunction) => {
     })
   }
 }
+
+export default auth
