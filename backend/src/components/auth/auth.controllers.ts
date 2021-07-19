@@ -3,12 +3,11 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {Request, Response, Router} from 'express'
 import Controller from '../../interfaces/controllers.interface'
-import userModels from '../user/user.models'
+import User from '../user/user.models'
 
 class AuthController implements Controller {
   public path = '/auth'
   public router = Router()
-  private User = userModels
 
   constructor() {
     this.initializeRoutes()
@@ -19,10 +18,10 @@ class AuthController implements Controller {
     this.router.post(`${this.path}/login`, this.login)
   }
 
-  private signup = async (req: Request, res: Response) => {
+  private async signup(req: Request, res: Response) {
     try {
       const hashPassword = await bcrypt.hash(req.body.password, 10)
-      const user = await this.User.create({
+      const user = await User.create({
         email: req.body.email,
         password: hashPassword
       })
@@ -36,9 +35,9 @@ class AuthController implements Controller {
     }
   }
 
-  private login = async (req: Request, res: Response) => {
+  private async login(req: Request, res: Response) {
     try {
-      const user = await this.User.findOne({email: req.body.email})
+      const user = await User.findOne({email: req.body.email})
       if (!user) {
         return res.status(401).json({error: 'Utilisateur non trouvé !'})
       }

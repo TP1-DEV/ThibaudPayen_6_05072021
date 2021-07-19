@@ -1,7 +1,7 @@
 import config from '../config/config'
 import {NextFunction, Request, Response} from 'express'
 import jwt from 'jsonwebtoken'
-import DecodedToken from '../interfaces/auth.interfaces'
+import DecodedToken from '../components/auth/auth.interfaces'
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
