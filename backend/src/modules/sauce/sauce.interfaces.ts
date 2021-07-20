@@ -1,4 +1,4 @@
-interface Sauce extends Document {
+export default interface Sauce extends Document {
   userId: string
   name: string
   manufacturer: string
@@ -11,5 +11,3 @@ interface Sauce extends Document {
   usersLiked: string[]
   usersDisliked: string[]
 }
-
-export default Sauce

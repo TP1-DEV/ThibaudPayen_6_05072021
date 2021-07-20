@@ -1,11 +1,11 @@
 import {Request, Response, Router} from 'express'
 import fs from 'fs'
-import multer from '../../middleware/multer'
-import auth from '../../middleware/auth'
+import multer from '../../middleware/multer.middleware'
+import auth from '../auth/auth.services'
 import Controller from '../../interfaces/controllers.interface'
 import Sauce from './sauce.models'
 
-class SauceController implements Controller {
+export default class SauceController implements Controller {
   public path = '/sauces'
   public router = Router()
 
@@ -22,7 +22,7 @@ class SauceController implements Controller {
     this.router.post(`${this.path}/:id/like`, auth, this.likes)
   }
 
-  async getAllSauces(req: Request, res: Response) {
+  public async getAllSauces(req: Request, res: Response) {
     try {
       const sauces = await Sauce.find()
       res.status(200).json(sauces)
@@ -31,7 +31,7 @@ class SauceController implements Controller {
     }
   }
 
-  async getOneSauce(req: Request, res: Response) {
+  public async getOneSauce(req: Request, res: Response) {
     try {
       const sauce = await Sauce.findOne({_id: req.params.id})
       res.status(200).json(sauce)
@@ -40,7 +40,7 @@ class SauceController implements Controller {
     }
   }
 
-  async createSauce(req: Request, res: Response) {
+  public async createSauce(req: Request, res: Response) {
     try {
       const sauceObject = JSON.parse(req.body.sauce)
       if (req.file !== undefined) {
@@ -57,7 +57,7 @@ class SauceController implements Controller {
     }
   }
 
-  async modifySauce(req: Request, res: Response) {
+  public async modifySauce(req: Request, res: Response) {
     try {
       const sauceObject = req.file
         ? {
@@ -72,7 +72,7 @@ class SauceController implements Controller {
     }
   }
 
-  async deleteSauce(req: Request, res: Response) {
+  public async deleteSauce(req: Request, res: Response) {
     try {
       const sauce = await Sauce.findOne({_id: req.params.id})
       if (sauce !== null) {
@@ -89,7 +89,7 @@ class SauceController implements Controller {
     }
   }
 
-  async likes(req: Request, res: Response) {
+  public async likes(req: Request, res: Response) {
     const like = req.body.like
     try {
       switch (like) {
@@ -117,5 +117,3 @@ class SauceController implements Controller {
     }
   }
 }
-
-export default SauceController

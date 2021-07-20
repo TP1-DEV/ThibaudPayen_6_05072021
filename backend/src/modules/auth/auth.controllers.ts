@@ -1,11 +1,11 @@
-import config from '../../config/config'
+import 'dotenv/config'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {Request, Response, Router} from 'express'
 import Controller from '../../interfaces/controllers.interface'
 import User from '../user/user.models'
 
-class AuthController implements Controller {
+export default class AuthController implements Controller {
   public path = '/auth'
   public router = Router()
 
@@ -47,12 +47,10 @@ class AuthController implements Controller {
       }
       res.status(200).json({
         userId: user._id,
-        token: jwt.sign({userId: user._id}, config.token, {expiresIn: '24h'})
+        token: jwt.sign({userId: user._id}, `${process.env.SECRET_KEY}`, {expiresIn: '24h'})
       })
     } catch (error) {
       res.status(500).json({error})
     }
   }
 }
-
-export default AuthController

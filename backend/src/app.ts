@@ -1,30 +1,28 @@
-import config from './config/config'
+import 'dotenv/config'
+import path from 'path'
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import helmet from 'helmet'
-import path from 'path'
-import Controller from './interfaces/controllers.interface'
+import ControllerInterface from './interfaces/controllers.interface'
 
-class App {
-  public app: express.Application
+export default class App {
+  private app: express.Application
 
-  constructor(controllers: Controller[]) {
+  constructor(controllers: ControllerInterface[]) {
     this.app = express()
-
     this.connectToTheDatabase()
     this.initializeMiddlewares()
     this.initializeControllers(controllers)
   }
 
-  public listen() {
-    this.app.listen(process.env.PORT, () => {
-      console.log(`App listening on the port ${process.env.PORT}`)
-    })
-  }
-
-  public getServer() {
-    return this.app
+  private connectToTheDatabase() {
+    const {DB_USER, DB_PASSWORD, DB_PATH} = process.env
+    try {
+      mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_PATH}`, {useNewUrlParser: true, useUnifiedTopology: true})
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   private initializeMiddlewares() {
@@ -35,20 +33,15 @@ class App {
     this.app.use('/images', express.static(path.join(__dirname, './assets/images')))
   }
 
-  private initializeControllers(controllers: Controller[]) {
+  private initializeControllers(controllers: ControllerInterface[]) {
     controllers.forEach((controller) => {
       this.app.use('/api', controller.router)
     })
   }
 
-  private async connectToTheDatabase() {
-    try {
-      await mongoose.connect(config.url, {useNewUrlParser: true, useUnifiedTopology: true})
-      return console.log('Connexion à MongoDB réussie !')
-    } catch (error) {
-      return console.log('Connexion à MongoDB échouée !')
-    }
+  public listen() {
+    this.app.listen(process.env.PORT, () => {
+      console.log(`App listening on the port ${process.env.PORT}`)
+    })
   }
 }
-
-export default App

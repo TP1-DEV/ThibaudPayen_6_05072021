@@ -4,9 +4,8 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "start:prod": "tsc & ts-node dist/app.js",
-    "start:dev": "tsnd src/app.ts --watch --pretty --transpile-only",
-    "test": "tsnd src/server.ts --watch"
+    "start:prod": "tsc & ts-node ./dist/server.js",
+    "start:dev": "tsnd ./src/server.ts --watch --pretty --transpile-only"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +13,7 @@
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "envalid": "^7.1.1",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
     "jsonwebtoken": "^8.5.1",
