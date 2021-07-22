@@ -98,9 +98,11 @@ export default class SauceController implements Controller {
           if (sauce !== null && sauce.likes === 1) {
             await Sauce.updateOne({_id: req.params.id}, {$inc: {likes: -1}, $pull: {usersLiked: req.body.userId}})
             res.status(200).json({message: 'Avis supprimé'})
-          } else {
+          } else if (sauce !== null && sauce.dislikes === 1) {
             await Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: -1}, $pull: {usersDisliked: req.body.userId}})
             res.status(200).json({message: 'Avis supprimé'})
+          } else {
+            res.status(500).json({message: 'erreur interne'})
           }
           break
         case 1:
@@ -113,7 +115,7 @@ export default class SauceController implements Controller {
           break
       }
     } catch (error) {
-      res.status(500).json({message: 'error'})
+      res.status(500).json(error)
     }
   }
 }
