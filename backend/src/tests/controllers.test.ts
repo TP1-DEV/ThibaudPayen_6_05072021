@@ -57,24 +57,21 @@ describe('GET /api/sauces', () => {
 })
 
 describe('POST /api/sauces', () => {
-  test('it should add sauce in db', () => {
+  test('it should add sauce in db', (done) => {
     const userId = '60fa7ebef2efc61fc44b763c'
     const token = jwt.sign({userId: userId}, `${process.env.SECRET_KEY}`, {expiresIn: '24h'})
     request(app.getApp())
       .post('/api/sauces')
+      .attach('image', './src/tests/test.png')
       .field('name', 'MyName')
       .field('manufacturer', 'MyManufacturer')
       .field('description', 'MyDesc')
       .field('mainPepper', 'Tomato')
       .field('heat', 7)
-      .field('userId', '60fa7ebef2efc61fc44b763c')
-      .attach('imageUrl', './src/tests/test.jpg')
+      .field('userId', userId)
       .auth(token, {type: 'bearer'})
       .expect('Content-Type', /json/)
-      .expect(201)
-      .end((err, res) => {
-        console.log(res)
-      })
+      .expect(200, done)
   })
 })
 
@@ -113,34 +110,32 @@ describe('PUT /api/sauces/:id', () => {
   })
 })
 
-/* describe('DELETE /api/sauces/:id', () => {
+describe('DELETE /api/sauces/:id', () => {
   test("it should delete specific sauce from db", (done) => {
     const userId = '60fa7ebef2efc61fc44b763c'
     const token = jwt.sign({userId: userId}, `${process.env.SECRET_KEY}`, {expiresIn: '24h'})
     request(app.getApp())
     .delete('/api/sauces/60f7efd4a95e68342801549b')
-    .send({
-      userId: userId
-    })
     .auth(token, {type: 'bearer'})
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .expect(200, done)
   })
-}) */
+})
 
-/* describe('POST /api/sauces/:id/like', () => {
+describe('POST /api/sauces/:id/like', () => {
   test("it should add like or dislike to specific sauce from db", (done) => {
     const userId = '60fa7ebef2efc61fc44b763c'
     const token = jwt.sign({userId: userId}, `${process.env.SECRET_KEY}`, {expiresIn: '24h'})
     request(app.getApp())
     .post('/api/sauces/60f7efd4a95e68342801549b')
     .send({
-      userId: userId
+      userId: userId,
+      likes: 1
     })
     .auth(token, {type: 'bearer'})
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .expect(200, done)
   })
-}) */
+})
