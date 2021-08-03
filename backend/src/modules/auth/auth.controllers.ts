@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import validator from 'validator'
 import {Request, Response, Router} from 'express'
 import Controller from '../../interfaces/controllers.interface'
 import User from '../user/user.models'
@@ -19,7 +20,10 @@ export default class AuthController implements Controller {
   }
 
   private async signup(req: Request, res: Response) {
-    try {
+   try {
+     const validPassword = validator.isStrongPassword(req.body.password)
+     const validEmail = validator.isEmail(req.body.email)
+     if (validPassword === true && validEmail === true) {
       const hashPassword = await bcrypt.hash(req.body.password, 10)
       const user = await User.create({
         email: req.body.email,
@@ -28,8 +32,11 @@ export default class AuthController implements Controller {
       if (user !== null) {
         res.status(201).json({message: 'Utilisateur créé !'})
       } else {
-        res.status(400).json({message: 'Utilisateur non créé !'})
+        res.status(400).json({message: 'Utilisateur non trouvé !'})
       }
+     } else {
+       res.status(400).json({message: 'Champs invalides !'})
+     }
     } catch (error) {
       res.status(500).json({error})
     }
