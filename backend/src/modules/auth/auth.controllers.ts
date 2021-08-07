@@ -23,7 +23,7 @@ export default class AuthController implements Controller {
    try {
      const validPassword = validator.isStrongPassword(req.body.password)
      const validEmail = validator.isEmail(req.body.email)
-     if (validPassword === true && validEmail === true) {
+     if (validPassword && validEmail) {
       const hashPassword = await bcrypt.hash(req.body.password, 10)
       const user = await User.create({
         email: req.body.email,
@@ -35,7 +35,7 @@ export default class AuthController implements Controller {
         res.status(400).json({message: 'Utilisateur non trouvé !'})
       }
      } else {
-       res.status(400).json({message: 'Champs invalides !'})
+       res.status(400).json({message: 'Champs invalide !'})
      }
     } catch (error) {
       res.status(500).json({error})

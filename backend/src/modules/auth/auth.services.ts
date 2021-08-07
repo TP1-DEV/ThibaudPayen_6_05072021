@@ -9,7 +9,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const decodedToken = jwt.verify(token, `${process.env.SECRET_KEY}`) as DecodedToken
     const userId = decodedToken.userId
     if (req.body.userId && req.body.userId !== userId) {
-      throw 'Invalid user ID'
+      return 'Invalid user ID'
     } else {
       next()
     }

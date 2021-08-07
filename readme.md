@@ -17,7 +17,7 @@ Projet 6 du parcours développeur web Openclassrooms : "Construisez une API séc
 - [angular-cli](https://github.com/angular/angular-cli) `npm install -g @angular/cli`
 - [node-sass](https://www.npmjs.com/package/node-sass) : attention à prendre la version correspondante à NodeJS. Pour Node 14.0 par exemple, installer node-sass en version 4.14+, pour ce projet : `npm install node-sass@4.14`
 
-Sur Windows, ces installations nécessitent d'être exécuter en tant qu'administrateur.
+Sur Windows, ces installations nécessitent d'être exécuté en tant qu'administrateur.
 
 - Depuis le dossier /frontend, exécuter `npm install`
  - Démarrer le serveur de developpent en exécutant la commande `ng serve`

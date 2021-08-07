@@ -24,7 +24,7 @@ describe('POST /api/auth/signup', () => {
   test('it should create new User and save it in DB', (done) => {
     request(app.getApp())
     .post('/api/auth/signup')
-    .send({email: 'test123@test.com', password: 'test123'})
+    .send({email: 'test123@test.com', password: 'V?9m4YTc|a]2'})
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .expect(201, done)
@@ -35,7 +35,7 @@ describe('POST /api/auth/login', () => {
   test('it should log in User', (done) => {
     request(app.getApp())
     .post('/api/auth/login')
-    .send({email: 'test123@test.com', password: 'test123'})
+    .send({email: 'test123@test.com', password: 'V?9m4YTc|a]2'})
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
     .expect(200, done)
@@ -63,15 +63,17 @@ describe('POST /api/sauces', () => {
     request(app.getApp())
       .post('/api/sauces')
       .attach('image', './src/tests/test.png')
-      .field('name', 'MyName')
-      .field('manufacturer', 'MyManufacturer')
-      .field('description', 'MyDesc')
-      .field('mainPepper', 'Tomato')
-      .field('heat', 7)
-      .field('userId', userId)
+      .field('sauce', JSON.stringify({
+        name: 'MyName',
+        manufacturer: 'MyManufacturer',
+        description: 'MyDesc',
+        mainPepper: 'Tomato',
+        heat: 7,
+        userId: '60fa7ebef2efc61fc44b763c'
+      }))
       .auth(token, {type: 'bearer'})
       .expect('Content-Type', /json/)
-      .expect(200, done)
+      .expect(201, done)
   })
 })
 
