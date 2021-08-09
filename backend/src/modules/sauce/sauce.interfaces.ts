@@ -1,4 +1,4 @@
-export default interface Sauce extends Document {
+export default interface Sauce {
   userId: string
   name: string
   manufacturer: string

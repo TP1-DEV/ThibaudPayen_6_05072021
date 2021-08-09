@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
     cb(null, '../backend/src/assets/images')
   },
   filename: (req: any, file: any, cb: any) => {
-    const name = slugify(file.originalname, {replacement:'_', lower: true})
+    const name = slugify(file.originalname, {replacement: '_', lower: true})
     cb(null, `${Date.now()}-${name}`)
   }
 })

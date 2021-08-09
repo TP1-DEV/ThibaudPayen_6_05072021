@@ -20,23 +20,17 @@ export default class AuthController implements Controller {
   }
 
   private async signup(req: Request, res: Response) {
-   try {
-     const validPassword = validator.isStrongPassword(req.body.password)
-     const validEmail = validator.isEmail(req.body.email)
-     if (validPassword && validEmail) {
-      const hashPassword = await bcrypt.hash(req.body.password, 10)
-      const user = await User.create({
-        email: req.body.email,
-        password: hashPassword
-      })
-      if (user !== null) {
+    try {
+      const validPassword = validator.isStrongPassword(req.body.password)
+      const validEmail = validator.isEmail(req.body.email)
+      if (validPassword && validEmail) {
+        const hashPassword = await bcrypt.hash(req.body.password, 10)
+        await User.create({
+          email: req.body.email,
+          password: hashPassword
+        })
         res.status(201).json({message: 'Utilisateur créé !'})
-      } else {
-        res.status(400).json({message: 'Utilisateur non trouvé !'})
       }
-     } else {
-       res.status(400).json({message: 'Champs invalide !'})
-     }
     } catch (error) {
       res.status(500).json({error})
     }

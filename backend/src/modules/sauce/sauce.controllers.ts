@@ -4,6 +4,7 @@ import multer from '../../middleware/multer.middleware'
 import auth from '../auth/auth.services'
 import Controller from '../../interfaces/controllers.interface'
 import Sauce from './sauce.models'
+import {RequestCustom} from '../auth/auth.interfaces'
 
 export default class SauceController implements Controller {
   public path = '/sauces'
@@ -27,16 +28,20 @@ export default class SauceController implements Controller {
       const sauces = await Sauce.find()
       res.status(200).json(sauces)
     } catch (error) {
-      res.status(404).json({message: 'Sauces non trouvées !'})
+      res.status(500).json({error})
     }
   }
 
   public async getOneSauce(req: Request, res: Response) {
     try {
       const sauce = await Sauce.findOne({_id: req.params.id})
-      res.status(200).json(sauce)
+      if (sauce !== null) {
+        res.status(200).json(sauce)
+      } else {
+        res.status(404).json({message: 'Sauce non trouvée !'})
+      }
     } catch (error) {
-      res.status(404).json({message: 'Sauce non trouvée !'})
+      res.status(500).json({error})
     }
   }
 
@@ -50,7 +55,7 @@ export default class SauceController implements Controller {
         })
         res.status(201).json({message: 'Sauce ajoutée !'})
       } else {
-        res.status(404).json({message: 'Fichier non trouvé !'})
+        res.status(403).json({message: 'Fichier non trouvé !'})
       }
     } catch (error) {
       res.status(500).json({error})
@@ -79,8 +84,9 @@ export default class SauceController implements Controller {
 
   public async deleteSauce(req: Request, res: Response) {
     try {
+      const reqCustom = req as RequestCustom
       const sauce = await Sauce.findOne({_id: req.params.id})
-      if (sauce !== null) {
+      if (sauce !== null && reqCustom.userId === sauce.userId) {
         const filename = sauce.imageUrl.split('/images/')[1]
         fs.unlink(`../backend/src/assets/images/${filename}`, async () => {
           await Sauce.deleteOne({_id: req.params.id})
@@ -105,10 +111,15 @@ export default class SauceController implements Controller {
         switch (like) {
           case 0:
             if (usersLikedId !== undefined) {
-              await Sauce.updateOne({_id: req.params.id}, {$inc: {likes: -1}, $pull: {usersLiked: req.body.userId}})
+              await Sauce.updateOne(
+                {_id: req.params.id}, 
+                {$inc: {likes: -1}, $pull: {usersLiked: req.body.userId}})
               res.status(200).json({message: 'Avis supprimé'})
             } else if (usersDislikedId !== undefined) {
-              await Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: -1}, $pull: {usersDisliked: req.body.userId}})
+              await Sauce.updateOne(
+                {_id: req.params.id},
+                {$inc: {dislikes: -1}, $pull: {usersDisliked: req.body.userId}}
+              )
               res.status(200).json({message: 'Avis supprimé'})
             } else {
               res.status(403).json({message: 'Avis déjà supprimé !'})
@@ -116,7 +127,9 @@ export default class SauceController implements Controller {
             break
           case 1:
             if (user !== usersLikedId) {
-              await Sauce.updateOne({_id: req.params.id}, {$inc: {likes: 1}, $push: {usersLiked: req.body.userId}})
+              await Sauce.updateOne(
+                {_id: req.params.id}, 
+                {$inc: {likes: 1}, $push: {usersLiked: req.body.userId}})
               res.status(200).json({message: "J'aime"})
             } else {
               res.status(403).json({message: 'Sauce déjà like !'})
@@ -124,7 +137,10 @@ export default class SauceController implements Controller {
             break
           case -1:
             if (user !== usersDislikedId) {
-              await Sauce.updateOne({_id: req.params.id}, {$inc: {dislikes: 1}, $push: {usersDisliked: req.body.userId}})
+              await Sauce.updateOne(
+                {_id: req.params.id},
+                {$inc: {dislikes: 1}, $push: {usersDisliked: req.body.userId}}
+              )
               res.status(200).json({message: "Je n'aime pas"})
             } else {
               res.status(403).json({message: 'Sauce déjà dislike !'})
