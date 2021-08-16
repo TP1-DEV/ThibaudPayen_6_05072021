@@ -1,17 +1,17 @@
 import 'dotenv/config'
 import path from 'path'
-import express from 'express'
-import mongoose from 'mongoose'
+import express, {Application} from 'express'
+import mongoose, {Mongoose} from 'mongoose'
 import cors from 'cors'
 import helmet from 'helmet'
 import mongoSanitize from 'express-mongo-sanitize'
-import limiter from './middleware/ratelimit.middleware'
+import limiter from './middlewares/ratelimit.middleware'
 import {cleanEnv, port, str} from 'envalid'
 import ControllerInterface from './interfaces/controllers.interface'
 
 export default class App {
-  private app: express.Application
-  public connection!: Promise<mongoose.Mongoose>
+  public app: Application
+  public connection!: Promise<Mongoose>
 
   constructor(controllers: ControllerInterface[]) {
     this.app = express()
@@ -32,18 +32,15 @@ export default class App {
     })
   }
 
-  public getApp() {
-    return this.app
-  }
-
   private connectToTheDatabase() {
-    const {DB_USER, DB_PASSWORD, DB_PATH, DB_URL} = process.env
     try {
-      const url = DB_URL ?? `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_PATH}`
+      const url =
+        process.env.DB_URL ?? `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_PATH}`
       this.connection = mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+      console.log('Connection has been established successfully.')
       return this.connection
     } catch (error) {
-      throw new Error(error)
+      console.log('Unable to connect to the database:', error)
     }
   }
 
@@ -71,5 +68,9 @@ export default class App {
     this.app.listen(process.env.PORT, () => {
       console.log(`App listening on the port ${process.env.PORT}`)
     })
+  }
+
+  public getApp() {
+    return this.app
   }
 }

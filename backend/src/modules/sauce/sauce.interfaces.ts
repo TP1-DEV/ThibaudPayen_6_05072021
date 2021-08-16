@@ -8,6 +8,6 @@ export default interface Sauce {
   heat: number
   likes: number
   dislikes: number
-  usersLiked: string[]
-  usersDisliked: string[]
+  usersLiked: Array<string>
+  usersDisliked: Array<string>
 }

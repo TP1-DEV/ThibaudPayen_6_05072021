@@ -10,6 +10,7 @@ import Sauce from '../modules/sauce/sauce.models'
 
 let app: App
 let dbInstance: MongoMemoryServer
+const JestAuthController = new AuthController()
 
 beforeEach(async () => {
   dbInstance = await MongoMemoryServer.create()
@@ -38,9 +39,10 @@ describe('POST /api/auth/signup', () => {
       .expect(201)
   })
   test('it should show error 500 user already exist', async () => {
+    const email = JestAuthController.cryptEmail('jest.test@test.com')
     const hashPassword = await bcrypt.hash('V?9m4YTc|a]2', 10)
     await User.create({
-      email: 'jest.test@test.com',
+      email: email,
       password: hashPassword
     })
     return request(app.getApp())
@@ -54,9 +56,10 @@ describe('POST /api/auth/signup', () => {
 
 describe('POST /api/auth/login', () => {
   test('it should log in User', async () => {
+    const email = JestAuthController.cryptEmail('jest.test@test.com')
     const hashPassword = await bcrypt.hash('V?9m4YTc|a]2', 10)
     await User.create({
-      email: 'jest.test@test.com',
+      email: email,
       password: hashPassword
     })
     return request(app.getApp())
@@ -67,9 +70,10 @@ describe('POST /api/auth/login', () => {
       .expect(200)
   })
   test('it should show error status 401 when trying to log in with invalid password', async () => {
+    const email = JestAuthController.cryptEmail('jest.test@test.com')
     const hashPassword = await bcrypt.hash('V?9m4YTc|a]2', 10)
     await User.create({
-      email: 'jest.test@test.com',
+      email: email,
       password: hashPassword
     })
     return request(app.getApp())

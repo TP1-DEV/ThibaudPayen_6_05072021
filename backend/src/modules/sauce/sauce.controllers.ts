@@ -1,6 +1,6 @@
 import {Request, Response, Router} from 'express'
 import fs from 'fs'
-import multer from '../../middleware/multer.middleware'
+import multer from '../../middlewares/multer.middleware'
 import auth from '../auth/auth.services'
 import Controller from '../../interfaces/controllers.interface'
 import Sauce from './sauce.models'
