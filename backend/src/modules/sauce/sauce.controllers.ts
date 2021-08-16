@@ -23,16 +23,16 @@ export default class SauceController implements Controller {
     this.router.post(`${this.path}/:id/like`, auth, this.likes)
   }
 
-  public async getAllSauces(req: Request, res: Response) {
+  public async getAllSauces(req: Request, res: Response): Promise<void> {
     try {
       const sauces = await Sauce.find()
       res.status(200).json(sauces)
     } catch (error) {
-      res.status(500).json({error})
+      res.status(404).json({error})
     }
   }
 
-  public async getOneSauce(req: Request, res: Response) {
+  public async getOneSauce(req: Request, res: Response): Promise<void> {
     try {
       const sauce = await Sauce.findOne({_id: req.params.id})
       if (sauce !== null) {
@@ -41,11 +41,11 @@ export default class SauceController implements Controller {
         res.status(404).json({message: 'Sauce non trouvée !'})
       }
     } catch (error) {
-      res.status(500).json({error})
+      console.log(error)
     }
   }
 
-  public async createSauce(req: Request, res: Response) {
+  public async createSauce(req: Request, res: Response): Promise<void> {
     try {
       const sauceObject = JSON.parse(req.body.sauce)
       if (req.file !== undefined) {
@@ -58,11 +58,11 @@ export default class SauceController implements Controller {
         res.status(403).json({message: 'Fichier non trouvé !'})
       }
     } catch (error) {
-      res.status(500).json({error})
+      console.log(error)
     }
   }
 
-  public async modifySauce(req: Request, res: Response) {
+  public async modifySauce(req: Request, res: Response): Promise<void> {
     try {
       const sauce = await Sauce.findOne({_id: req.params.id})
       if (sauce !== null && req.body.userId === sauce.userId) {
@@ -78,11 +78,11 @@ export default class SauceController implements Controller {
         res.status(403).json({message: 'Non autorisé'})
       }
     } catch (error) {
-      res.status(500).json({error})
+      console.log(error)
     }
   }
 
-  public async deleteSauce(req: Request, res: Response) {
+  public async deleteSauce(req: Request, res: Response): Promise<void> {
     try {
       const reqCustom = req as RequestCustom
       const sauce = await Sauce.findOne({_id: req.params.id})
@@ -96,11 +96,11 @@ export default class SauceController implements Controller {
         res.status(404).json({message: 'Sauce non trouvée !'})
       }
     } catch (error) {
-      res.status(500).json({error})
+      console.log(error)
     }
   }
 
-  public async likes(req: Request, res: Response) {
+  public async likes(req: Request, res: Response): Promise<void> {
     try {
       const like = req.body.like
       const user = req.body.userId
@@ -149,7 +149,7 @@ export default class SauceController implements Controller {
         }
       }
     } catch (error) {
-      res.status(500).json(error)
+      console.log(error)
     }
   }
 }

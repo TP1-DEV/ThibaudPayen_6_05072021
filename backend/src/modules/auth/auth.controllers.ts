@@ -20,7 +20,7 @@ export default class AuthController implements Controller {
     this.router.post(`${this.path}/login`, this.login.bind(this))
   }
 
-  public cryptEmail(email: string) {
+  public cryptEmail(email: string): string | undefined {
     try {
       if (process.env.CRYPTOJS_KEY && process.env.CRYPTOJS_IV !== undefined) {
         const key = CryptoJS.enc.Base64.parse(process.env.CRYPTOJS_KEY)
@@ -47,7 +47,7 @@ export default class AuthController implements Controller {
         res.status(201).json({message: 'Utilisateur créé !'})
       }
     } catch (error) {
-      res.status(500).json({error})
+      console.log(error)
     }
   }
 
@@ -67,7 +67,7 @@ export default class AuthController implements Controller {
         token: jwt.sign({userId: user._id}, `${process.env.SECRET_KEY}`, {expiresIn: '24h'})
       })
     } catch (error) {
-      res.status(500).json({error})
+      console.log(error)
     }
   }
 }

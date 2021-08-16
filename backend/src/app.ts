@@ -8,6 +8,7 @@ import mongoSanitize from 'express-mongo-sanitize'
 import limiter from './middlewares/ratelimit.middleware'
 import {cleanEnv, port, str} from 'envalid'
 import ControllerInterface from './interfaces/controllers.interface'
+import { Server } from 'http'
 
 export default class App {
   public app: Application
@@ -44,7 +45,7 @@ export default class App {
     }
   }
 
-  public getConnection() {
+  public getConnection(): Promise<typeof mongoose> {
     return this.connection
   }
 
@@ -64,13 +65,13 @@ export default class App {
     })
   }
 
-  public listen() {
-    this.app.listen(process.env.PORT, () => {
+  public listen(): Server {
+    return this.app.listen(process.env.PORT, () => {
       console.log(`App listening on the port ${process.env.PORT}`)
     })
   }
 
-  public getApp() {
+  public getApp(): Application {
     return this.app
   }
 }
